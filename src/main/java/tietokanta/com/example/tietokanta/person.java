@@ -4,13 +4,15 @@ public class person {
     private String Name = null;
     private String hautaustapa = null;
     private String paikka = null;
-    private boolean tuhkausPaikka = false;
+    private String tuhkausPaikka = null;
+    private String hautausPvm = null;
 
-    public person(String name, String hautaustapa, String paikka, boolean tuhkausPaikka){
+    public person(String name, String hautaustapa, String paikka, String tuhkausPaikka, String hautauspvm){
     this.Name = name;
     this.hautaustapa = hautaustapa;
     this.paikka = paikka;
     this.tuhkausPaikka = tuhkausPaikka;
+    this.hautausPvm = hautauspvm;
     }
     public String getName(){
         return Name;
@@ -21,8 +23,11 @@ public class person {
     public String getPaikka(){
         return paikka;
     }
-    public boolean getTuhkausPaikka(){
+    public String getTuhkausPaikka(){
         return tuhkausPaikka;
+    }
+    public String getHautausPvm(){
+        return hautausPvm;
     }
 
 
