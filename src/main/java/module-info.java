@@ -8,7 +8,8 @@ module tietokanta.com.example.tietokanta {
     requires validatorfx;
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
-    requires eu.hansolo.tilesfx;
+    requires org.apache.poi.poi;
+
 
     opens tietokanta.com.example.tietokanta to javafx.fxml;
     exports tietokanta.com.example.tietokanta;

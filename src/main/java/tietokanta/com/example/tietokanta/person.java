@@ -6,13 +6,15 @@ public class person {
     private String paikka = null;
     private String tuhkausPaikka = null;
     private String hautausPvm = null;
+    private String rivi = null;
 
-    public person(String name, String hautaustapa, String paikka, String tuhkausPaikka, String hautauspvm){
+    public person(String name, String hautaustapa, String paikka, String rivi, String tuhkausPaikka, String hautauspvm){
     this.Name = name;
     this.hautaustapa = hautaustapa;
     this.paikka = paikka;
     this.tuhkausPaikka = tuhkausPaikka;
     this.hautausPvm = hautauspvm;
+    this.rivi = rivi;
     }
     public String getName(){
         return Name;
@@ -28,6 +30,9 @@ public class person {
     }
     public String getHautausPvm(){
         return hautausPvm;
+    }
+    public String getRivi(){
+        return rivi;
     }
 
 

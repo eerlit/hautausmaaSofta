@@ -10,30 +10,66 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:11.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:linux:11.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:11.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:linux:11.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-base:11.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-base:linux:11.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:11.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:linux:11.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-web:11.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-web:linux:11.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-media:11.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-media:linux:11.0.2" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="file://$USER_HOME$/apachepio/poi-src-5.1.0-20211024" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$USER_HOME$/apachepio/poi-src-5.1.0-20211024/osgi/src/main/java" />
+          <root url="file://$USER_HOME$/apachepio/poi-src-5.1.0-20211024/osgi/src/test/java" />
+          <root url="file://$USER_HOME$/apachepio/poi-src-5.1.0-20211024/poi-examples/src/main/java" />
+          <root url="file://$USER_HOME$/apachepio/poi-src-5.1.0-20211024/poi-examples/src/main/ruby/java" />
+          <root url="file://$USER_HOME$/apachepio/poi-src-5.1.0-20211024/poi-examples/src/test/java" />
+          <root url="file://$USER_HOME$/apachepio/poi-src-5.1.0-20211024/poi-excelant/src/main/java" />
+          <root url="file://$USER_HOME$/apachepio/poi-src-5.1.0-20211024/poi-excelant/src/poi-ant-contrib/java" />
+          <root url="file://$USER_HOME$/apachepio/poi-src-5.1.0-20211024/poi-excelant/src/test/java" />
+          <root url="file://$USER_HOME$/apachepio/poi-src-5.1.0-20211024/poi-integration/src/test/java" />
+          <root url="file://$USER_HOME$/apachepio/poi-src-5.1.0-20211024/poi-ooxml-lite-agent/src/main/java" />
+          <root url="file://$USER_HOME$/apachepio/poi-src-5.1.0-20211024/poi-ooxml/src/main/java" />
+          <root url="file://$USER_HOME$/apachepio/poi-src-5.1.0-20211024/poi-ooxml/src/test/java" />
+          <root url="file://$USER_HOME$/apachepio/poi-src-5.1.0-20211024/poi-scratchpad/src/main/java" />
+          <root url="file://$USER_HOME$/apachepio/poi-src-5.1.0-20211024/poi-scratchpad/src/test/java" />
+          <root url="file://$USER_HOME$/apachepio/poi-src-5.1.0-20211024/poi/src/main/java" />
+          <root url="file://$USER_HOME$/apachepio/poi-src-5.1.0-20211024/poi/src/test/java" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="file://$USER_HOME$/apachepio/poi-bin-5.1.0" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+        <jarDirectory url="file://$USER_HOME$/apachepio/poi-bin-5.1.0" recursive="false" />
+      </library>
+    </orderEntry>
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:17.0.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:linux:17.0.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:17.0.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:linux:17.0.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-base:17.0.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-base:linux:17.0.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:17.0.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:linux:17.0.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-web:17.0.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-web:linux:17.0.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-media:17.0.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-media:linux:17.0.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.controlsfx:controlsfx:11.1.0" level="project" />
-    <orderEntry type="library" name="Maven: com.dlsc.formsfx:formsfx-core:11.3.2" level="project" />
+    <orderEntry type="library" name="Maven: com.dlsc.formsfx:formsfx-core:11.4.2" level="project" />
     <orderEntry type="library" name="Maven: net.synedra:validatorfx:0.1.13" level="project" />
     <orderEntry type="library" name="Maven: org.kordamp.ikonli:ikonli-javafx:12.2.0" level="project" />
     <orderEntry type="library" name="Maven: org.kordamp.ikonli:ikonli-core:12.2.0" level="project" />
     <orderEntry type="library" name="Maven: org.kordamp.bootstrapfx:bootstrapfx-core:0.4.0" level="project" />
-    <orderEntry type="library" name="Maven: eu.hansolo:tilesfx:11.48" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.junit.jupiter:junit-jupiter-api:5.7.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.apiguardian:apiguardian-api:1.1.0" level="project" />
+    <orderEntry type="library" name="Maven: eu.hansolo:tilesfx:17.0.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.junit.jupiter:junit-jupiter-api:5.8.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.opentest4j:opentest4j:1.2.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.junit.platform:junit-platform-commons:1.7.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.junit.jupiter:junit-jupiter-engine:5.7.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.junit.platform:junit-platform-engine:1.7.1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.junit.platform:junit-platform-commons:1.8.1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.apiguardian:apiguardian-api:1.1.2" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.junit.jupiter:junit-jupiter-engine:5.8.1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.junit.platform:junit-platform-engine:1.8.1" level="project" />
   </component>
 </module>
