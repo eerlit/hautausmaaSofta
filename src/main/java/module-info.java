@@ -1,3 +1,4 @@
+
 module tietokanta.com.example.tietokanta {
     requires javafx.controls;
     requires javafx.fxml;
@@ -9,7 +10,7 @@ module tietokanta.com.example.tietokanta {
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
     requires org.apache.poi.poi;
-
+    requires org.apache.poi.ooxml;
 
     opens tietokanta.com.example.tietokanta to javafx.fxml;
     exports tietokanta.com.example.tietokanta;
