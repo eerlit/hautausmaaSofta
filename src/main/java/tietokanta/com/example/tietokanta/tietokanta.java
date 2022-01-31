@@ -1,6 +1,7 @@
 package tietokanta.com.example.tietokanta;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,6 +17,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.text.DateFormat;
 import java.util.*;
 
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -32,9 +34,13 @@ public class tietokanta extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 
-        ObservableList<ObservableList<String>> data = FXCollections.observableArrayList();
+      final ObservableList<person>data = FXCollections.observableArrayList();
         List<List<String>> excelContent = new ArrayList<>();
-       TableView<ObservableList<String>> tableView = new TableView();
+
+       TableView <person> tableView = new TableView();
+       boolean backupFound = false;
+      XSSFWorkbook workbook = new XSSFWorkbook();
+      XSSFSheet sheet = workbook.createSheet("data");
 
         TextField nimiKenttä = new TextField();
         TextField riviKenttä = new TextField();
@@ -43,59 +49,92 @@ public class tietokanta extends Application {
         TextField tuhkausPaikkaKenttä = new TextField();
         TextField hautausPvmKenttä = new TextField();
 
-        try {
             DataFormatter formatter = new DataFormatter();
 
-            int rowCounter = 0;
-            FileInputStream fis = new FileInputStream("testi.xlsx");
-            XSSFWorkbook wb = new XSSFWorkbook(fis);
+            File directory = new File(new File(".").getAbsolutePath());
+            String[] list = directory.list();
+        TableColumn nimiCol = new TableColumn("Nimi");
+        nimiCol.setCellValueFactory(new PropertyValueFactory<>("Name"));
+        TableColumn tapaCol = new TableColumn("Hautaustapa");
+        tapaCol.setCellValueFactory(new PropertyValueFactory<>("Hautaustapa"));
+        TableColumn paikkaCol = new TableColumn("Paikka");
+        paikkaCol.setCellValueFactory(new PropertyValueFactory<>("Paikka"));
+        TableColumn riviCol = new TableColumn("Rivi");
+       riviCol.setCellValueFactory(new PropertyValueFactory<>("Rivi"));
+        TableColumn tuhkausCol = new TableColumn("Tuhkaus Paikka");
+        tuhkausCol.setCellValueFactory(new PropertyValueFactory<>("TuhkausPaikka"));
+        TableColumn pvmCol = new TableColumn("Hautauspäivämäärä");
+        pvmCol.setCellValueFactory(new PropertyValueFactory<>("HautausPvm"));
 
-            XSSFSheet sheet = wb.getSheetAt(0);
+        tableView.getColumns().addAll(nimiCol,tapaCol,paikkaCol,riviCol,tuhkausCol,pvmCol);
 
-            for(Row row: sheet){
-                List<String> tempList = new ArrayList<>();
-                for (Cell cell:row){
-                   // CellReference cellRef = new CellReference(row.getRowNum(), cell.getColumnIndex());
-                        String text = formatter.formatCellValue(cell);
-                        tempList.add(text.length() == 0 ? "":text);
+            for (int i = 0; i < list.length; i++) {
+                String fileName = list[i];
+                if (fileName.equals("Hautakirja_Backup.xlsx")) {
+                    System.out.print("löyty");
+                    backupFound = true;
+                } else {
+                 /*   if(workbook.getSheet("data")== null) {
+                        workbook.createSheet("data");
+                    }
+                    FileOutputStream out = new FileOutputStream("Hautakirja_Backup.xlsx");
 
+                        workbook.write(out);
+                        out.close();*/
                 }
+            }
+            if(backupFound) {
+                try {
+                    FileInputStream fis = new FileInputStream("Hautakirja_Backup.xlsx");
+                    int columnCounter = 0;
+                    int rowCounter = 0;
 
-                excelContent.add(tempList);
+                    Workbook wb = WorkbookFactory.create(fis);
+                    Sheet sheet1 = wb.getSheetAt(0);
 
-                ++rowCounter;
-                if(rowCounter == 5){
-                    break;
+                    for (Row row : sheet1) {
+                        List<String> tempList = new ArrayList();
+
+                        for (Cell cell : row) {
+
+                                String text = formatter.formatCellValue(cell);
+                                System.out.print(++columnCounter + ": " + text + " - ");
+                                   System.out.println(tempList);
+
+                                if(row.getRowNum() != 0) {
+                                    tempList.add(text.length() == 0 ? "" : text);
+                                }
+
+                        }
+                        columnCounter = 0;
+                        System.out.print("derpad");
+                        if(!tempList.isEmpty()) {
+                            excelContent.add(tempList);
+                        }
+                        ++rowCounter;
+                        if (rowCounter == 5) {
+                            break;
+                        }
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
+                //tässä populoidaan solut
+                    if(!excelContent.isEmpty()) {
+                        for (int i = 0; i < excelContent.size(); i++) {
+                            int curcol = 0;
+                            data.add(new person(excelContent.get(i).get(curcol),
+                                    excelContent.get(i).get(curcol + 1),
+                                    excelContent.get(i).get(curcol + 2),
+                                    excelContent.get(i).get(curcol + 3),
+                                    excelContent.get(i).get(curcol + 4),
+                                    excelContent.get(i).get(curcol + 5)));
+                        }
+
+                        tableView.setItems(data);
+                    }
             }
-        } catch(IOException e){
-            e.printStackTrace();
-        }
-
-
-            for(int i = 0; i <excelContent.get(0).size(); i++){
-                int curCol = i;
-                final TableColumn<ObservableList<String>, String> column = new TableColumn<>(excelContent.get(0).get(i));
-                column.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(curCol)));
-                tableView.getColumns().add(column);
-
-
-            }
-        for(int i = 0; i <excelContent.size(); i++){
-            if(excelContent.get(i).contains("nimi") ||
-                    excelContent.get(i).contains("hautaustapa")||
-                    excelContent.get(i).contains("paikka")||
-                    excelContent.get(i).contains("rivi")||
-                    excelContent.get(i).contains("tuhkauspaikka")||
-                    excelContent.get(i).contains("hautauspäivämäärä")){
-
-            }else{
-                data.add(FXCollections.observableArrayList(excelContent.get(i)));
-            }
-
-
-        }
-        tableView.setItems(data);
 
         Button addPerson = new Button("lisää");
 
@@ -118,37 +157,30 @@ public class tietokanta extends Application {
                 VBox layout = new VBox();
                 layout.getChildren().addAll(nimi,nimiKenttä,hautausTapa, hautaustapaKenttä,paikka, paikkaKenttä,rivi, riviKenttä, tuhkausPaikka, tuhkausPaikkaKenttä,hautauspvm,hautausPvmKenttä, saveButton);
 
-                saveButton.setOnAction(new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent actionEvent) {
-                        ObservableList<ObservableList<String>> data1 = FXCollections.observableArrayList();
-                        List<List<String>> personData = new ArrayList<>();
-                        List<String> tempList = new ArrayList<>();
+                saveButton.setOnAction(actionEvent -> {
 
-                        tempList.add(nimiKenttä.getText());
-                        tempList.add(hautaustapaKenttä.getText());
-                        tempList.add(paikkaKenttä.getText());
-                                tempList.add(riviKenttä.getText());
-                        tempList.add(tuhkausPaikkaKenttä.getText());
-                        tempList.add(hautausPvmKenttä.getText());
-                        personData.add(tempList);
-                        for(int i = 0; i <personData.size();i++){
-                            data.add(FXCollections.observableArrayList(personData.get(i)));
-                        }
-                      tableView.setItems(data);
-                       nimiKenttä.setText("");
-                       hautaustapaKenttä.setText("");
-                       paikkaKenttä.setText("");
-                       riviKenttä.setText("");
-                       tuhkausPaikkaKenttä.setText("");
-                       hautausPvmKenttä.setText("");
-                    }
+                   data.add(new person(nimiKenttä.getText(),
+                                       hautaustapaKenttä.getText(),
+                                       paikkaKenttä.getText(),
+                                       riviKenttä.getText(),
+                                        tuhkausPaikkaKenttä.getText(),
+                                        hautausPvmKenttä.getText()));
+
+                   nimiKenttä.setText("");
+                   hautaustapaKenttä.setText("");
+                   paikkaKenttä.setText("");
+                   riviKenttä.setText("");
+                   tuhkausPaikkaKenttä.setText("");
+                   hautausPvmKenttä.setText("");
+
                 });
+               tableView.setItems(data);
+
 
                 Scene newScene = new Scene(layout, 600,600);
 
                 Stage newWindow = new Stage();
-                newWindow.setTitle("lisää tietokantaan");
+                newWindow.setTitle("lisää hautakirjaan");
                 newWindow.setScene(newScene);
                 newWindow.initModality(Modality.WINDOW_MODAL);
                 newWindow.initOwner(stage);
@@ -162,95 +194,16 @@ public class tietokanta extends Application {
         saveToExcel.setOnAction(new EventHandler<ActionEvent>() {
             @Override
            public void handle(ActionEvent actionEvent) {
-                System.out.print("joo ");
-                DataFormatter formatter = new DataFormatter();
-                XSSFWorkbook workbook = new XSSFWorkbook();
-                XSSFSheet persons = workbook.createSheet("data");
-               // XSSFRow row;
 
-        Row row = persons.createRow(0);
-              //  Map<String, Object[]> dataToBeSaved = new TreeMap<String, Object[]>();
-
-                for(int i = 0; i < tableView.getColumns().size(); i++){
-                    row.createCell(i).setCellValue(tableView.getColumns().get(i).getText());
-
-
-                 /*   int curCol = 0;
-
-                    dataToBeSaved.put("1", new Object[]{tableView.getColumns().get(curCol).getText(),
-                            (curCol++),
-                            tableView.getColumns().get(curCol).getText(),
-                            (curCol++),
-                                    tableView.getColumns().get(curCol).getText(),
-                            (curCol++),
-                                          tableView.getColumns().get(curCol).getText(),
-                            (curCol++),
-                                                   tableView.getColumns().get(curCol).getText(),
-                            (curCol++),
-                                                          tableView.getColumns().get(curCol).getText()});*/
-
-
-
-                }
-
-                    for(int i = 0; i<tableView.getItems().size(); i++) {
-
-                        row = persons.createRow(i+1);
-                        for(int j = 0; j <tableView.getColumns().size();j++)
-                        {
-                            if(tableView.getColumns().get(j).getCellData(i) != null){
-                                row.createCell(j).setCellValue(tableView.getColumns().get(j).getCellData(i).toString());
-                            }else{
-                                row.createCell(j).setCellValue("");
-                            }
-                        }
-                    /*    dataToBeSaved.put("2", new Object[]{
-                                tableView.getItems().get(0).get(i)});
-                      //  System.out.print(tableView.getColumns().get(curCol).getCellData(i));
-                      //  System.out.print("curcol "+ curCol);
-                      //  System.out.print(tableView.getItems().get(0).size());
-                        System.out.print(tableView.getItems().get(0).get(i));*/
-
-                    }
-
-
-
-         /*   Set<String> keyId = dataToBeSaved.keySet();
-
-            int rowId = 0;
-                for (String key: keyId)
-            {
-
-                row = persons.createRow(rowId++);
-                Object[] objectArr = dataToBeSaved.get(key);
-
-                int cellId = 0;
-                for(Object obj:objectArr){
-                    Cell cell = row.createCell(cellId++);
-
-                    cell.setCellValue(obj.toString());
-                }
-
-            }*/
-                try {
-                    FileChooser chooser = new FileChooser();
-                    chooser.setTitle("open");
-                    chooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("text","*txt"));
-                    File selectedFile = chooser.showSaveDialog(stage);
-                    if(selectedFile != null) {
-
-                    }
-                    FileOutputStream out = new FileOutputStream(new File(String.valueOf(selectedFile)));
-                    System.out.print("filessä");
-                    workbook.write(out);
-                    out.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-
+                writeToFile(workbook,tableView,"hautakirjaOte");
+                showAlertNoHeader("Hautakirjaotteen tallennus", "Hautakirjaote tallennettu.");
             }
         });
+
+        stage.setOnCloseRequest(windowEvent ->
+
+
+        writeToFile(workbook,tableView, "backUp"));
 
        VBox vbox = new VBox(tableView);
         VBox vbox2 = new VBox(0);
@@ -263,8 +216,69 @@ public class tietokanta extends Application {
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.show();
-    }
 
+    }
+    public String getDateTime(){
+        Locale locale = new Locale("fi","FI");
+        DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT,DateFormat.SHORT, locale);
+
+        return dateFormat.format(new Date());
+    }
+    private void writeToFile(XSSFWorkbook wantedFile, TableView<person> tableView, String whichFunction){
+        FileOutputStream out = null;
+        XSSFSheet persons;
+        if(wantedFile.getSheet("data") == null){
+            wantedFile.createSheet("data");
+        }
+        persons = wantedFile.getSheet("data");
+
+        Row row = persons.createRow(0);
+
+
+        for(int i = 0; i < tableView.getColumns().size(); i++){
+            row.createCell(i).setCellValue(tableView.getColumns().get(i).getText());
+
+        }
+        for(int i = 0; i <tableView.getItems().size(); i++) {
+            row = persons.createRow(i+1);
+            for(int j = 0; j <tableView.getColumns().size();j++)
+            {
+                if(tableView.getColumns().get(j).getCellData(i) != null){
+                    row.createCell(j).setCellValue(tableView.getColumns().get(j).getCellData(i).toString());
+                }else{
+                    row.createCell(j).setCellValue("");
+                }
+            }
+        }
+        try {
+            switch(whichFunction){
+                case "hautakirjaOte": {
+
+                    out = new FileOutputStream("HautakirjaOte_" + getDateTime() + ".xlsx");
+                    break;
+                }
+                case "backUp":
+                {
+                    out = new FileOutputStream("Hautakirja_Backup.xlsx");
+                    break;
+                }
+            }
+           // FileOutputStream out = new FileOutputStream("HautakirjaOte_"+getDateTime()+".xlsx");
+
+           wantedFile.write(out);
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+    private void showAlertNoHeader(String title,String message){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
     public static void main(String[] args) {
         launch();
     }
