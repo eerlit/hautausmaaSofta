@@ -1,8 +1,6 @@
 package tietokanta.com.example.tietokanta;
 
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -12,20 +10,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
 import java.io.*;
 import java.text.DateFormat;
 import java.util.*;
-
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.util.CellReference;
-import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -42,6 +33,12 @@ public class tietokanta extends Application {
       XSSFWorkbook workbook = new XSSFWorkbook();
       XSSFSheet sheet = workbook.createSheet("data");
 
+        Button addPerson = new Button("lisää");
+        Button saveToExcel = new Button("tallenna exceliin");
+        Button searchButton = new Button("etsi");
+        saveToExcel.setMaxSize(200, 200);
+        saveToExcel.setMinHeight(100);
+
         TextField nimiKenttä = new TextField();
         TextField riviKenttä = new TextField();
         TextField hautaustapaKenttä = new TextField();
@@ -53,6 +50,7 @@ public class tietokanta extends Application {
 
             File directory = new File(new File(".").getAbsolutePath());
             String[] list = directory.list();
+
         TableColumn nimiCol = new TableColumn("Nimi");
         nimiCol.setCellValueFactory(new PropertyValueFactory<>("Name"));
         TableColumn tapaCol = new TableColumn("Hautaustapa");
@@ -68,11 +66,13 @@ public class tietokanta extends Application {
 
         tableView.getColumns().addAll(nimiCol,tapaCol,paikkaCol,riviCol,tuhkausCol,pvmCol);
 
+        //find out if backup exists
             for (int i = 0; i < list.length; i++) {
                 String fileName = list[i];
                 if (fileName.equals("Hautakirja_Backup.xlsx")) {
                     System.out.print("löyty");
                     backupFound = true;
+
                 } else {
                  /*   if(workbook.getSheet("data")== null) {
                         workbook.createSheet("data");
@@ -91,6 +91,7 @@ public class tietokanta extends Application {
 
                     Workbook wb = WorkbookFactory.create(fis);
                     Sheet sheet1 = wb.getSheetAt(0);
+                    sheet1.protectSheet("pass");
 
                     for (Row row : sheet1) {
                         List<String> tempList = new ArrayList();
@@ -135,12 +136,6 @@ public class tietokanta extends Application {
                         tableView.setItems(data);
                     }
             }
-
-        Button addPerson = new Button("lisää");
-
-        Button saveToExcel = new Button("tallenna exceliin");
-        saveToExcel.setMaxSize(200, 200);
-        saveToExcel.setMinHeight(100);
 
         addPerson.setOnAction(new EventHandler<ActionEvent>(){
 
@@ -188,9 +183,8 @@ public class tietokanta extends Application {
                 newWindow.setX(stage.getX()+200);
                 newWindow.setY(stage.getY()+100);
                 newWindow.show();
-
             }});
-
+        //exceliin tallennusnapin toiminnallisuus
         saveToExcel.setOnAction(new EventHandler<ActionEvent>() {
             @Override
            public void handle(ActionEvent actionEvent) {
@@ -199,18 +193,27 @@ public class tietokanta extends Application {
                 showAlertNoHeader("Hautakirjaotteen tallennus", "Hautakirjaote tallennettu.");
             }
         });
+        //etsi-napin toiminnallisuus
+        searchButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
 
+            }
+        });
+
+        //softaa sulkiessa ruksista tapahtuu jotain..
         stage.setOnCloseRequest(windowEvent ->
+                writeToFile(workbook,tableView, "backUp"));
+      //  stage.setOnCloseRequest(windowEvent ->
+        //        writeToFile(workbook,tableView, "hautakirjaOte"));
 
-
-        writeToFile(workbook,tableView, "backUp"));
-
+        //määritellään alkunäkymä
        VBox vbox = new VBox(tableView);
         VBox vbox2 = new VBox(0);
         vbox2.setAlignment(Pos.BOTTOM_CENTER);
 
         vbox2.getChildren().add(saveToExcel);
-        vbox.getChildren().addAll(addPerson, vbox2);
+        vbox.getChildren().addAll(addPerson, vbox2,searchButton);
 
         Scene scene = new Scene(vbox, 600, 600);
         stage.setTitle("Hello!");
@@ -259,7 +262,9 @@ public class tietokanta extends Application {
                 }
                 case "backUp":
                 {
+
                     out = new FileOutputStream("Hautakirja_Backup.xlsx");
+
                     break;
                 }
             }
@@ -279,6 +284,11 @@ public class tietokanta extends Application {
         alert.setContentText(message);
         alert.showAndWait();
     }
+    private void searchForPersons(TableView<person>tableView){
+
+
+    }
+
     public static void main(String[] args) {
         launch();
     }
